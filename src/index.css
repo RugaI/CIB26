@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    color: #020617;
+    background: #ffffff;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Sora', sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-sora  { font-family: 'Sora', sans-serif; }
+  .font-inter { font-family: 'Inter', sans-serif; }
+}
+
+/* ── Keyframes ─────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-16px); }
+}
+
+@keyframes floatYSlow {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes pulseSlow {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.75; }
+}
+
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes particle-float {
+  0%, 100% { transform: translateY(0) scale(1);    opacity: 0.20; }
+  50%       { transform: translateY(-22px) scale(1.15); opacity: 0.55; }
+}
+
+@keyframes bounceSlow {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ── Animation classes ─────────────────────────────────────── */
+
+.animate-fade-up {
+  animation: fadeUp 0.75s ease forwards;
+}
+.animate-fade-up-d1 {
+  opacity: 0;
+  animation: fadeUp 0.75s ease 0.15s forwards;
+}
+.animate-fade-up-d2 {
+  opacity: 0;
+  animation: fadeUp 0.75s ease 0.30s forwards;
+}
+.animate-fade-up-d3 {
+  opacity: 0;
+  animation: fadeUp 0.75s ease 0.45s forwards;
+}
+.animate-fade-up-d4 {
+  opacity: 0;
+  animation: fadeUp 0.75s ease 0.60s forwards;
+}
+.animate-fade-in {
+  animation: fadeIn 1s ease forwards;
+}
+.animate-float {
+  animation: floatY 7s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: floatYSlow 10s ease-in-out infinite;
+}
+.animate-rotate-slow {
+  animation: rotateSlow 40s linear infinite;
+}
+.animate-pulse-slow {
+  animation: pulseSlow 4s ease-in-out infinite;
+}
+.animate-bounce-slow {
+  animation: bounceSlow 2.2s ease-in-out infinite;
+}
+
+/* ── Hero gradient text ─────────────────────────────────────── */
+
+.hero-gradient {
+  background: linear-gradient(90deg, #0EA5A5 0%, #0dcfcf 50%, #0284C7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Section decorative line ───────────────────────────────── */
+
+.section-line::after {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 3px;
+  background: linear-gradient(90deg, #0EA5A5, #0284C7);
+  margin-top: 16px;
+  border-radius: 2px;
+}
+.section-line-center::after {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Navbar link underline ─────────────────────────────────── */
+
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #0EA5A5;
+  transition: width 0.25s ease;
+  border-radius: 2px;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ── Speaker cards ──────────────────────────────────────────── */
+
+.speaker-img-wrap {
+  overflow: hidden;
+}
+.speaker-card:hover .speaker-img {
+  transform: scale(1.06);
+}
+.speaker-img {
+  transition: transform 0.45s ease;
+}
+
+/* ── Sponsor logos ──────────────────────────────────────────── */
+
+.grayscale-logo {
+  filter: grayscale(100%) opacity(0.40);
+  transition: filter 0.3s ease, transform 0.3s ease;
+  background: white;
+}
+.grayscale-logo:hover {
+  filter: grayscale(0%) opacity(1);
+  transform: scale(1.03);
+}
+
+/* ── Schedule rows ──────────────────────────────────────────── */
+
+.schedule-row:hover {
+  background: rgba(14, 165, 165, 0.045);
+}
+
+/* ── Topic cards ────────────────────────────────────────────── */
+
+.topic-card:hover .topic-icon {
+  color: #0EA5A5;
+}
