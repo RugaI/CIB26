@@ -160,7 +160,7 @@ export default function Register() {
         <div className="mt-10 flex items-center justify-center gap-3 text-white/30 reveal">
           <MapPin size={16} className="text-teal" />
           <span className="font-inter text-sm">
-            Venue: Hôtel à Casablanca, Morocco — exact location to be confirmed
+            Venue: Agora Conference Centre, Casablanca, Morocco
           </span>
         </div>
       </div>

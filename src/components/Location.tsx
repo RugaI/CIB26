@@ -67,15 +67,15 @@ export default function Location() {
                 Venue Information
               </h3>
               <p className="font-inter text-navy/55 text-base leading-relaxed mb-6">
-                The symposium will be held at a premier hotel venue in Casablanca, Morocco's 
-                largest city and economic capital. The venue offers state-of-the-art conference 
+                The symposium will be held at the Agora Conference Centre in Casablanca, Morocco's
+                largest city and economic capital. The venue offers state-of-the-art conference
                 facilities, easy accessibility, and proximity to the city's main attractions.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { icon: Hotel, title: 'Conference Hotel', desc: 'Premium venue with full amenities (À confirmer)' },
+                { icon: Hotel, title: 'Agora Conference Centre', desc: 'Premier conference venue in Casablanca' },
                 { icon: Plane, title: 'Mohammed V Airport', desc: '30 min from city center — international flights' },
                 { icon: Sun, title: 'November Climate', desc: 'Pleasant 18-22°C — ideal for exploring' },
                 { icon: Compass, title: 'City Center', desc: 'Easy access to restaurants & attractions' },
@@ -94,7 +94,7 @@ export default function Location() {
             <div className="reveal reveal-delay-3 flex items-center gap-3 pt-4">
               <MapPin size={18} className="text-teal" />
               <span className="font-inter text-navy/50 text-sm">
-                Exact venue location will be confirmed and announced shortly.
+                Agora Conference Centre, Casablanca, Morocco
               </span>
             </div>
           </div>

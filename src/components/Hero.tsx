@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowRight, MapPin, Calendar, ChevronDown, Dna } from 'lucide-react';
+import { ArrowRight, MapPin, Calendar, ChevronDown } from 'lucide-react';
 import ParticleCanvas from './ParticleCanvas';
 
 const CONFERENCE_DATE = new Date('2026-11-12T09:00:00');
@@ -128,8 +128,8 @@ export default function Hero() {
                 </div>
                 <div>
                   <p className="text-teal text-xs font-inter font-bold uppercase tracking-wider mb-0.5">Lieu</p>
-                  <p className="font-sora font-bold text-white text-lg">Hôtel à Casablanca</p>
-                  <p className="font-inter text-white/40 text-sm">(À confirmer)</p>
+                  <p className="font-sora font-bold text-white text-lg">Agora Conference Centre</p>
+                  <p className="font-inter text-white/40 text-sm">Casablanca, Morocco</p>
                 </div>
               </div>
             </div>
@@ -174,11 +174,6 @@ export default function Hero() {
               {/* Glowing orbs */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-teal/15 rounded-full blur-3xl animate-glow" />
               <div className="absolute top-1/4 right-1/4 w-40 h-40 bg-sky-accent/20 rounded-full blur-2xl animate-glow" style={{ animationDelay: '1.5s' }} />
-
-              {/* Floating DNA */}
-              <div className="absolute top-8 right-8 animate-float-slow">
-                <Dna size={180} className="text-teal/20" strokeWidth={0.8} />
-              </div>
 
               {/* Central visual — animated rings */}
               <div className="absolute inset-0 flex items-center justify-center">
@@ -250,10 +245,10 @@ export default function Hero() {
       <div className="relative border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { value: '200+', label: 'Researchers' },
-            { value: '30+',  label: 'Countries' },
+            { value: '150+', label: 'Researchers' },
+            { value: '10+',  label: 'Countries' },
             { value: '3',    label: 'Scientific Tracks' },
-            { value: '2',    label: 'Conference Days' },
+            { value: '1',    label: 'Conference Day' },
           ].map((s, i) => (
             <div key={s.label} className={`text-center ${i > 0 ? 'md:border-l border-white/10' : ''}`}>
               <span className="block font-oswald font-bold text-teal text-3xl">{s.value}</span>

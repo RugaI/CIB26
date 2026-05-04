@@ -1,11 +1,12 @@
+import { useEffect, useRef } from 'react';
 import { FlaskConical, Globe, Users, Award, Dna, Microscope, Activity } from 'lucide-react';
 import ParticleCanvas from './ParticleCanvas';
 
 const stats = [
-  { value: '200+', label: 'Researchers',      sub: 'from around the world' },
-  { value: '30+',  label: 'Countries',         sub: 'represented' },
+  { value: '150+', label: 'Researchers',      sub: 'from around the world' },
+  { value: '10+',  label: 'Countries',         sub: 'represented' },
   { value: '3',    label: 'Scientific Tracks', sub: 'interdisciplinary' },
-  { value: '2',    label: 'Conference Days',   sub: 'of intensive science' },
+  { value: '1',    label: 'Conference Day',    sub: 'of intensive science' },
 ];
 
 const badges = [
@@ -16,8 +17,29 @@ const badges = [
 ];
 
 export default function About() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.reveal').forEach((el, i) => {
+              setTimeout(() => el.classList.add('visible'), i * 150);
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="about" className="relative py-32 bg-cream overflow-hidden">
+    <section id="about" ref={sectionRef} className="relative py-32 bg-cream overflow-hidden">
       {/* Subtle background pattern */}
       <ParticleCanvas className="opacity-20" particleCount={40} color="14, 165, 165" />
 
