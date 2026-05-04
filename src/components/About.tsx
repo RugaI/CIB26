@@ -58,7 +58,9 @@ export default function About() {
 
           {/* ── Right — stats with visual flair ── */}
           <div className="grid grid-cols-2 gap-4 reveal reveal-delay-2">
-            {stats.map((s, i) => (
+            {stats.map((s, i) => {
+              const StatIcon = [Dna, Globe, Microscope, Activity][i];
+              return (
               <div
                 key={s.label}
                 className={`group p-8 rounded-2xl border transition-all duration-500 hover:scale-[1.02] ${
@@ -68,7 +70,7 @@ export default function About() {
                 }`}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${i % 2 === 0 ? 'bg-teal/10' : 'bg-teal/20'}`}>
-                  {[Dna, Globe, Microscope, Activity][i]({ size: 20, className: i % 2 === 0 ? 'text-teal' : 'text-teal-light' })}
+                  <StatIcon size={20} className={i % 2 === 0 ? 'text-teal' : 'text-teal-light'} />
                 </div>
                 <span
                   className={`block font-oswald font-bold text-5xl mb-1 transition-colors duration-300 ${
@@ -92,7 +94,8 @@ export default function About() {
                   {s.sub}
                 </span>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
