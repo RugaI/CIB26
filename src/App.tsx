@@ -5,6 +5,7 @@ import Speakers from './components/Speakers';
 import Topics from './components/Topics';
 import Program from './components/Program';
 import Register from './components/Register';
+import Location from './components/Location';
 import Sponsors from './components/Sponsors';
 import Footer from './components/Footer';
 
@@ -18,6 +19,7 @@ function App() {
       <Topics />
       <Program />
       <Register />
+      <Location />
       <Sponsors />
       <Footer />
     </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Clock, Mic, Users, Coffee, BookOpen, MessageSquare } from 'lucide-react';
 
 type SessionType = 'keynote' | 'break' | 'session' | 'workshop' | 'panel' | 'ceremony';
@@ -39,47 +39,53 @@ const typeConfig: Record<SessionType, { color: string; bg: string; label: string
   keynote:  { color: '#0EA5A5', bg: 'rgba(14,165,165,0.12)',  label: 'Keynote',   icon: Mic },
   session:  { color: '#0284C7', bg: 'rgba(2,132,199,0.12)',   label: 'Session',   icon: BookOpen },
   workshop: { color: '#1F6F8B', bg: 'rgba(31,111,139,0.12)',  label: 'Workshop',  icon: Users },
-  panel:    { color: '#082F49', bg: 'rgba(8,47,73,0.12)',      label: 'Panel',     icon: MessageSquare },
+  panel:    { color: '#E85D75', bg: 'rgba(232,93,117,0.12)',   label: 'Panel',     icon: MessageSquare },
   ceremony: { color: '#7C3AED', bg: 'rgba(124,58,237,0.12)',   label: 'Ceremony',  icon: Users },
   break:    { color: '#94A3B8', bg: 'rgba(148,163,184,0.08)', label: '',          icon: Coffee },
 };
 
-function SessionRow({ s }: { s: Session }) {
+function SessionRow({ s, index }: { s: Session; index: number }) {
   const cfg = typeConfig[s.type];
   const isBreak = s.type === 'break';
   const Icon = cfg.icon;
 
   return (
-    <div className={`schedule-row group flex items-start gap-4 px-6 py-4 rounded-xl transition-all duration-200 ${isBreak ? 'opacity-50' : ''}`}>
-      {/* Time */}
-      <div className="flex items-center gap-1.5 min-w-[130px] pt-0.5 shrink-0">
-        <Clock size={11} className="text-[#94A3B8]" />
-        <span className="font-inter text-xs text-[#020617]/40 font-medium tabular-nums">{s.time}</span>
-      </div>
-
-      {/* Left accent bar */}
+    <div
+      className={`schedule-row group flex items-start gap-5 px-6 py-5 rounded-2xl transition-all duration-300 ${isBreak ? 'opacity-45' : ''}`}
+      style={{ animationDelay: `${index * 50}ms` }}
+    >
+      {/* Timeline dot */}
       {!isBreak && (
-        <div className="w-0.5 self-stretch rounded-full shrink-0 mt-1" style={{ background: cfg.color, opacity: 0.4 }} />
+        <div className="hidden md:flex flex-col items-center pt-1">
+          <div className="w-3 h-3 rounded-full border-2 flex-shrink-0" style={{ borderColor: cfg.color, background: cfg.bg }} />
+        </div>
       )}
+      {isBreak && <div className="hidden md:block w-3 flex-shrink-0" />}
+
+      {/* Time */}
+      <div className="flex items-center gap-2 min-w-[130px] pt-0.5 shrink-0">
+        <Clock size={12} className="text-navy/30" />
+        <span className="font-inter text-xs text-navy/40 font-medium tabular-nums">{s.time}</span>
+      </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap items-center gap-2 mb-1">
+        <div className="flex flex-wrap items-center gap-2.5 mb-1.5">
           {cfg.label && (
             <span
-              className="inline-flex items-center gap-1 text-[10px] font-inter font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wide shrink-0"
+              className="inline-flex items-center gap-1.5 text-[10px] font-inter font-bold px-3 py-1 rounded-full uppercase tracking-wider shrink-0"
               style={{ color: cfg.color, background: cfg.bg }}
             >
-              <Icon size={9} />
+              <Icon size={10} />
               {cfg.label}
             </span>
           )}
-          <span className={`font-inter font-medium text-sm ${isBreak ? 'text-[#020617]/40' : 'text-[#082F49]'}`}>
+          <span className={`font-inter font-semibold text-sm ${isBreak ? 'text-navy/35' : 'text-navy'}`}>
             {s.title}
           </span>
         </div>
         {s.speaker && (
-          <span className="font-inter text-xs text-[#020617]/40 italic">{s.speaker}</span>
+          <span className="font-inter text-xs text-navy/40 italic ml-0.5">{s.speaker}</span>
         )}
       </div>
     </div>
@@ -89,33 +95,51 @@ function SessionRow({ s }: { s: Session }) {
 export default function Program() {
   const [day, setDay] = useState<1 | 2>(1);
   const sessions = day === 1 ? day1 : day2;
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section id="program" className="py-28 bg-[#F8FAFB]">
+    <section id="program" ref={sectionRef} className="py-32 bg-cream relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 lg:px-10">
-        <div className="text-center mb-14">
-          <p className="text-[#0EA5A5] font-inter font-semibold text-sm tracking-widest uppercase mb-4">
+        <div className="text-center mb-16 reveal">
+          <p className="text-teal font-inter font-semibold text-sm tracking-[0.2em] uppercase mb-4">
             Scientific Schedule
           </p>
-          <h2 className="font-sora font-extrabold text-[#082F49] text-4xl lg:text-5xl section-line section-line-center">
+          <h2 className="font-oswald font-bold text-navy text-5xl lg:text-6xl tracking-tight uppercase section-line section-line-center">
             Conference Program
           </h2>
-          <p className="font-inter text-[#020617]/55 text-lg mt-6 max-w-lg mx-auto leading-relaxed">
+          <p className="font-inter text-navy/50 text-lg mt-6 max-w-lg mx-auto leading-relaxed">
             Two days of keynotes, parallel sessions, workshops, and poster presentations.
           </p>
         </div>
 
         {/* Day toggle */}
-        <div className="flex items-center justify-center mb-8">
-          <div className="inline-flex rounded-full border border-[#082F49]/12 p-1 bg-white shadow-sm">
+        <div className="flex items-center justify-center mb-10 reveal">
+          <div className="inline-flex rounded-full border border-navy/10 p-1.5 bg-white shadow-lg shadow-navy/5">
             {([1, 2] as const).map((d) => (
               <button
                 key={d}
                 onClick={() => setDay(d)}
-                className={`px-7 py-2.5 rounded-full font-sora font-semibold text-sm transition-all duration-200 ${
+                className={`px-8 py-3 rounded-full font-oswald font-semibold text-sm tracking-wide transition-all duration-300 ${
                   day === d
-                    ? 'bg-[#082F49] text-white shadow-md'
-                    : 'text-[#020617]/50 hover:text-[#082F49]'
+                    ? 'bg-navy text-white shadow-lg'
+                    : 'text-navy/50 hover:text-navy'
                 }`}
               >
                 Day {d}
@@ -124,26 +148,26 @@ export default function Program() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-[#082F49]/06 overflow-hidden shadow-sm">
+        <div className="reveal bg-white rounded-3xl border border-navy/6 overflow-hidden shadow-xl shadow-navy/5">
           {/* Header */}
-          <div className="px-6 py-5 border-b border-[#082F49]/06 flex items-center gap-3 bg-gradient-to-r from-[#082F49]/02 to-transparent">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#0EA5A5]" />
-            <span className="font-sora font-bold text-[#082F49] text-sm">
+          <div className="px-8 py-6 border-b border-navy/6 flex items-center gap-4 bg-gradient-to-r from-navy/[0.03] to-transparent">
+            <div className="w-3 h-3 rounded-full bg-teal animate-pulse-slow" />
+            <span className="font-oswald font-bold text-navy text-lg tracking-wide uppercase">
               {day === 1 ? 'Day 1 — November 12, 2026' : 'Day 2 — November 13, 2026'}
             </span>
-            <span className="ml-auto font-inter text-[#020617]/30 text-xs">
+            <span className="ml-auto font-inter text-navy/30 text-xs">
               {sessions.filter(s => s.type !== 'break').length} events
             </span>
           </div>
 
-          <div className="divide-y divide-[#082F49]/04 px-2 py-2">
+          <div className="divide-y divide-navy/[0.04] px-3 py-3">
             {sessions.map((s, i) => (
-              <SessionRow key={i} s={s} />
+              <SessionRow key={i} s={s} index={i} />
             ))}
           </div>
         </div>
 
-        <p className="text-center font-inter text-[#020617]/30 text-xs mt-5">
+        <p className="text-center font-inter text-navy/30 text-xs mt-6 reveal">
           Schedule subject to change. Full program will be published upon confirmation of all speakers.
         </p>
       </div>

@@ -1,13 +1,16 @@
-import { Microscope, Shield, BarChart3, ChevronRight } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { Microscope, Shield, BarChart3, ChevronRight, Dna, Brain, Database } from 'lucide-react';
 
 const tracks = [
   {
     icon: Microscope,
+    bigIcon: Dna,
     label: 'Cancer Research',
     color: '#0EA5A5',
     bg: 'rgba(14,165,165,0.08)',
-    gradient: 'from-[#0EA5A5]/08 to-[#0EA5A5]/02',
+    gradient: 'from-[#0EA5A5]/10 to-[#0EA5A5]/02',
     borderHover: 'hover:border-[#0EA5A5]/40',
+    glow: 'group-hover:shadow-[#0EA5A5]/15',
     subtopics: [
       'Tumor Microenvironment',
       'Cancer Genomics & Epigenetics',
@@ -19,11 +22,13 @@ const tracks = [
   },
   {
     icon: Shield,
+    bigIcon: Brain,
     label: 'Immunology',
     color: '#0284C7',
     bg: 'rgba(2,132,199,0.08)',
-    gradient: 'from-[#0284C7]/08 to-[#0284C7]/02',
+    gradient: 'from-[#0284C7]/10 to-[#0284C7]/02',
     borderHover: 'hover:border-[#0284C7]/40',
+    glow: 'group-hover:shadow-[#0284C7]/15',
     subtopics: [
       'Tumor Immunology',
       'CAR-T & Cell Therapy',
@@ -35,11 +40,13 @@ const tracks = [
   },
   {
     icon: BarChart3,
+    bigIcon: Database,
     label: 'Bioinformatics',
     color: '#1F6F8B',
     bg: 'rgba(31,111,139,0.08)',
-    gradient: 'from-[#1F6F8B]/08 to-[#1F6F8B]/02',
+    gradient: 'from-[#1F6F8B]/10 to-[#1F6F8B]/02',
     borderHover: 'hover:border-[#1F6F8B]/40',
+    glow: 'group-hover:shadow-[#1F6F8B]/15',
     subtopics: [
       'Multi-omics Analysis',
       'Machine Learning in Medicine',
@@ -52,17 +59,41 @@ const tracks = [
 ];
 
 export default function Topics() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.reveal').forEach((el, i) => {
+              setTimeout(() => el.classList.add('visible'), i * 150);
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="topics" className="py-28 bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="text-center mb-16">
-          <p className="text-[#0EA5A5] font-inter font-semibold text-sm tracking-widest uppercase mb-4">
+    <section id="topics" ref={sectionRef} className="py-32 bg-navy relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-teal/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="text-center mb-16 reveal">
+          <p className="text-teal font-inter font-semibold text-sm tracking-[0.2em] uppercase mb-4">
             Scientific Tracks
           </p>
-          <h2 className="font-sora font-extrabold text-[#082F49] text-4xl lg:text-5xl section-line section-line-center">
+          <h2 className="font-oswald font-bold text-white text-5xl lg:text-6xl tracking-tight uppercase section-line section-line-center">
             Topics & Themes
           </h2>
-          <p className="font-inter text-[#020617]/55 text-lg mt-6 max-w-lg mx-auto leading-relaxed">
+          <p className="font-inter text-white/50 text-lg mt-6 max-w-lg mx-auto leading-relaxed">
             Three interconnected tracks spanning the full scope of modern biomedical science.
           </p>
         </div>
@@ -70,55 +101,49 @@ export default function Topics() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {tracks.map((t) => {
             const Icon = t.icon;
+            const BigIcon = t.bigIcon;
             return (
               <div
                 key={t.label}
-                className={`topic-card group relative p-8 rounded-2xl border border-[#082F49]/08 ${t.borderHover} hover:shadow-2xl hover:shadow-[#082F49]/06 transition-all duration-300 cursor-default overflow-hidden`}
+                className={`reveal group relative p-8 rounded-3xl border border-white/10 ${t.borderHover} hover:shadow-2xl ${t.glow} transition-all duration-500 cursor-default overflow-hidden bg-white/5 backdrop-blur-sm`}
               >
                 {/* Hover gradient bg */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${t.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+                  className={`absolute inset-0 bg-gradient-to-br ${t.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
                 />
 
                 <div className="relative">
-                  {/* Icon */}
-                  <div
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
-                    style={{ background: t.bg }}
-                  >
-                    <Icon
-                      size={24}
-                      className="topic-icon transition-colors duration-300"
-                      style={{ color: t.color }}
-                    />
-                  </div>
-
-                  {/* Track number badge */}
-                  <div className="absolute top-0 right-0">
-                    <span
-                      className="font-sora font-extrabold text-4xl opacity-[0.06]"
-                      style={{ color: t.color }}
+                  {/* Track number & big icon */}
+                  <div className="flex items-start justify-between mb-6">
+                    <div
+                      className="w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:shadow-lg"
+                      style={{ background: t.bg }}
                     >
-                      {tracks.indexOf(t) + 1}
-                    </span>
+                      <Icon
+                        size={28}
+                        className="topic-icon transition-colors duration-300"
+                        style={{ color: t.color }}
+                      />
+                    </div>
+                    <BigIcon size={60} className="opacity-[0.06]" style={{ color: t.color }} />
                   </div>
 
                   <h3
-                    className="font-sora font-bold text-xl mb-5 transition-colors duration-300"
-                    style={{ color: '#082F49' }}
+                    className="font-oswald font-bold text-2xl mb-5 transition-colors duration-300 uppercase tracking-tight"
+                    style={{ color: t.color }}
                   >
                     {t.label}
                   </h3>
 
-                  <ul className="space-y-2.5">
+                  <ul className="space-y-3">
                     {t.subtopics.map((s) => (
-                      <li key={s} className="flex items-center gap-2.5 group/item">
+                      <li key={s} className="flex items-center gap-3 group/item">
                         <ChevronRight
-                          size={12}
-                          className="flex-shrink-0 transition-transform duration-200 group-hover/item:translate-x-0.5"
+                          size={14}
+                          className="flex-shrink-0 transition-transform duration-200 group-hover/item:translate-x-1"
                           style={{ color: t.color }}
                         />
-                        <span className="font-inter text-sm text-[#020617]/65 leading-snug">
+                        <span className="font-inter text-sm text-white/60 leading-snug group-hover/item:text-white/80 transition-colors">
                           {s}
                         </span>
                       </li>

@@ -8,7 +8,7 @@ const links = [
   { label: 'Topics',   href: '#topics' },
   { label: 'Program',  href: '#program' },
   { label: 'Register', href: '#register' },
-  { label: 'Contact',  href: '#contact' },
+  { label: 'Location', href: '#location' },
 ];
 
 export default function Navbar() {
@@ -16,30 +16,30 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 48);
-    window.addEventListener('scroll', handler);
+    const handler = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', handler, { passive: true });
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-[#082F49]/95 backdrop-blur-md shadow-xl shadow-black/20'
+          ? 'glass shadow-2xl shadow-black/30'
           : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between h-[68px]">
-        <a href="#" className="group">
-          <CIBLogo size={36} theme="light" />
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between h-[72px]">
+        <a href="#" className="group relative">
+          <CIBLogo size={38} theme={scrolled ? 'light' : 'light'} />
         </a>
 
-        <nav className="hidden md:flex items-center gap-7">
+        <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="nav-link text-white/75 hover:text-white text-sm font-inter font-medium transition-colors duration-200"
+              className="nav-link text-white/70 hover:text-white text-sm font-inter font-medium transition-colors duration-300"
             >
               {l.label}
             </a>
@@ -48,13 +48,13 @@ export default function Navbar() {
 
         <a
           href="#register"
-          className="hidden md:inline-flex items-center px-5 py-2 rounded-full bg-[#0EA5A5] text-white text-sm font-sora font-semibold hover:bg-[#0d9191] transition-all duration-200 hover:shadow-[0_0_18px_rgba(14,165,165,0.45)]"
+          className="hidden md:inline-flex items-center px-6 py-2.5 rounded-full bg-teal text-white text-sm font-sora font-semibold hover:bg-teal-dark transition-all duration-300 hover:shadow-[0_0_30px_rgba(14,165,165,0.45)] hover:scale-105"
         >
           Register Now
         </a>
 
         <button
-          className="md:hidden text-white p-1"
+          className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
@@ -62,13 +62,18 @@ export default function Navbar() {
         </button>
       </div>
 
-      {open && (
-        <div className="md:hidden bg-[#082F49] border-t border-white/10 px-6 pb-6 pt-4 space-y-4">
+      {/* Mobile menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-500 ${
+          open ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="glass px-6 pb-8 pt-4 space-y-1">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="block text-white/75 hover:text-white text-sm font-inter font-medium transition-colors"
+              className="block text-white/70 hover:text-white hover:bg-white/5 text-sm font-inter font-medium transition-colors duration-200 py-3 px-4 rounded-lg"
               onClick={() => setOpen(false)}
             >
               {l.label}
@@ -76,13 +81,13 @@ export default function Navbar() {
           ))}
           <a
             href="#register"
-            className="inline-flex items-center px-5 py-2 rounded-full bg-[#0EA5A5] text-white text-sm font-sora font-semibold"
+            className="block text-center mt-4 px-6 py-3 rounded-full bg-teal text-white text-sm font-sora font-semibold hover:bg-teal-dark transition-colors"
             onClick={() => setOpen(false)}
           >
             Register Now
           </a>
         </div>
-      )}
+      </div>
     </header>
   );
 }
